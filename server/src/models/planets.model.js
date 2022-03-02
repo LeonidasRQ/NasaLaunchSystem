@@ -1,5 +1,6 @@
-const { parse } = require("csv-parse");
 const fs = require("fs");
+const path = require("path");
+const { parse } = require("csv-parse");
 
 const habitablePlanets = [];
 
@@ -14,32 +15,37 @@ function isHabitablePlanet(planet) {
 
 //The data that the below operation returns are given in Buffer format
 //Buffer: objects node uses to represent a collection of bytes
-fs.createReadStream("kepler_data.csv")
-  .pipe(
-    parse({
-      comment: "#",
-      columns: true,
-    })
-  ) //we use pipe for connecting the createReadStream output to our parse function
-  .on("data", (data) => {
-    if (isHabitablePlanet(data)) {
-      habitablePlanets.push(data);
-    }
-  })
-  .on("error", (err) => {
-    console.log(err);
-  })
-  .on("end", () => {
-    console.log(
-      habitablePlanets.map((planet) => {
-        return planet["kepler_name"];
+
+function loadPlanetsData() {
+  return new Promise((resolve, reject) => {
+    fs.createReadStream(
+      path.join(__dirname, "..", "..", "data", "kepler_data.csv")
+    )
+      .pipe(
+        parse({
+          comment: "#",
+          columns: true,
+        })
+      ) //we use pipe for connecting the createReadStream output to our parse function
+      .on("data", (data) => {
+        if (isHabitablePlanet(data)) {
+          habitablePlanets.push(data);
+        }
       })
-    );
-    console.log(`${habitablePlanets.length} habitable planets found!`);
+      .on("error", (err) => {
+        console.log(err);
+        reject(err);
+      })
+      .on("end", () => {
+        console.log(`${habitablePlanets.length} habitable planets found!`);
+        resolve();
+      });
   });
+}
 
 //We want to parse every peace of data that the funtion above outputs
 //fortunately, the parse function of our third party library receives streams
 module.exports = {
+  loadPlanetsData,
   planets: habitablePlanets,
 };
