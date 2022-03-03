@@ -47,7 +47,7 @@ function getAllPlanets() {
   return habitablePlanets;
 }
 
-//We want to parse every peace of data that the funtion above outputs
+//We want to parse every piece of data that the funtion above outputs
 //fortunately, the parse function of our third party library receives streams
 module.exports = {
   loadPlanetsData,
