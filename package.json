@@ -24,5 +24,8 @@
   "bugs": {
     "url": "https://github.com/LeonidasRQ/nasa_launch_system/issues"
   },
-  "homepage": "https://github.com/LeonidasRQ/nasa_launch_system#readme"
+  "homepage": "https://github.com/LeonidasRQ/nasa_launch_system#readme",
+  "dependencies": {
+    "axios": "^0.26.1"
+  }
 }
