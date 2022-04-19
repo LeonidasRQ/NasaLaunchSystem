@@ -13,7 +13,7 @@ describe("Launches API", () => {
     await mongoDisconnect();
   });
 
-  describe("Test GET /launches", () => {
+  describe("Test for GET /launches", () => {
     test("It should respond with 200 success", async () => {
       const response = await request(app)
         .get("/v1/launches")
